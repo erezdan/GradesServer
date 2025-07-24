@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="StoredProcedures\clear_all_data.sql" />
+    <Compile Include="StoredProcedures\data_generator.sql" />
+    <Compile Include="StoredProcedures\simple_migration_script.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
