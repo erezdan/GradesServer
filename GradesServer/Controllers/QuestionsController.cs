@@ -2,6 +2,7 @@
 using GradesServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GradesServer.DTOs;
 
 namespace GradesServer.Controllers
 {
@@ -27,7 +28,7 @@ namespace GradesServer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateQuestion([FromBody] Question dto)
+        public async Task<ActionResult> CreateQuestion([FromBody] QuestionDto dto)
         {
             if (dto.Score is < 0 or > 100)
                 return BadRequest("Score must be between 0 and 100");

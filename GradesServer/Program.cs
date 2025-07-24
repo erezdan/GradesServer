@@ -1,4 +1,6 @@
 
+using GradesServer.Services;
+
 namespace GradesServer
 {
     public class Program
@@ -13,6 +15,10 @@ namespace GradesServer
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Services
+            builder.Services.AddScoped<IReportService, ReportService>();
+            builder.Services.AddScoped<IQuestionService, QuestionService>();
 
             var app = builder.Build();
 
