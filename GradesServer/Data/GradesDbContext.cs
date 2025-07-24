@@ -63,8 +63,8 @@ namespace GradesServer.Data
                 .HasDefaultValue(null);
 
             modelBuilder.Entity<Question>()
-                .HasOne(q => q.Test)
-                .WithMany(t => t.Questions)
+                .HasOne<Test>()
+                .WithMany()
                 .HasForeignKey(q => q.TestId)
                 .OnDelete(DeleteBehavior.SetNull);
 

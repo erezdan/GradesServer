@@ -9,6 +9,5 @@
         public bool IsRelevant { get; set; }
 
         public int? TestId { get; set; }
-        public Test? Test { get; set; }
     }
 }
