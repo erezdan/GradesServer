@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="StoredProcedures\clear_all_data.sql" />
-    <Compile Include="StoredProcedures\data_generator.sql" />
-    <Compile Include="StoredProcedures\simple_migration_script.sql" />
+    <None Remove="StoredProcedures\clear_all_data.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="StoredProcedures\clear_all_data.sql" />
+    <Content Include="StoredProcedures\data_generator.sql" />
+    <Content Include="StoredProcedures\simple_migration_script.sql" />
   </ItemGroup>
 
   <ItemGroup>
