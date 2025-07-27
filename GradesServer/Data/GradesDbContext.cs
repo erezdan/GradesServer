@@ -22,7 +22,7 @@ namespace GradesServer.Data
         {
             // Subjects
             modelBuilder.Entity<Subject>()
-                .HasKey(s => s.SubjectId);
+                .HasKey(s => new { s.SnapshotId, s.SubjectId });
 
             modelBuilder.Entity<Subject>()
                 .Property(s => s.SubjectName)
@@ -35,7 +35,7 @@ namespace GradesServer.Data
 
             // Zones
             modelBuilder.Entity<Zone>()
-                .HasKey(z => z.ZoneId);
+                .HasKey(z => new { z.SnapshotId, z.ZoneId });
 
             modelBuilder.Entity<Zone>()
                 .Property(z => z.ZoneName)
@@ -48,7 +48,7 @@ namespace GradesServer.Data
 
             // Questions
             modelBuilder.Entity<Question>()
-                .HasKey(q => q.QuestionId);
+                .HasKey(q => new { q.SnapshotId, q.QuestionId });
 
             modelBuilder.Entity<Question>()
                 .Property(q => q.QuestionText)
@@ -88,12 +88,14 @@ namespace GradesServer.Data
             modelBuilder.Entity<SubjectZone>()
                 .HasOne<Subject>()
                 .WithMany()
-                .HasForeignKey(sz => new { sz.SnapshotId, sz.SubjectId });
+                .HasForeignKey(sz => new { sz.SnapshotId, sz.SubjectId })
+                .HasPrincipalKey(s => new { s.SnapshotId, s.SubjectId });
 
             modelBuilder.Entity<SubjectZone>()
                 .HasOne<Zone>()
                 .WithMany()
-                .HasForeignKey(sz => new { sz.SnapshotId, sz.ZoneId });
+                .HasForeignKey(sz => new { sz.SnapshotId, sz.ZoneId })
+                .HasPrincipalKey(z => new { z.SnapshotId, z.ZoneId });
 
             // ZonesQuestions (many-to-many)
             modelBuilder.Entity<ZoneQuestion>()

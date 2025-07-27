@@ -35,7 +35,7 @@ namespace GradesServer.Controllers
 
             var question = new Question
             {
-                SnapshotId = dto.SnapshotId,
+                //SnapshotId = dto.SnapshotId,
                 TestId = dto.TestId,
                 QuestionText = dto.QuestionText,
                 Score = dto.Score,
