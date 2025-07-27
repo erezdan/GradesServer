@@ -26,11 +26,14 @@ namespace GradesServer.Services
             if (dto.Score is < 0 or > 100)
                 throw new ArgumentException("Score must be between 0 and 100");
 
+            if (dto.TestId == null)
+                throw new ArgumentException("TestId is required");
+
             var question = new Question
             {
                 SnapshotId = dto.SnapshotId,
                 QuestionText = dto.QuestionText,
-                TestId = dto.TestId,
+                TestId = dto.TestId.Value,
                 Score = dto.Score,
                 IsRelevant = dto.IsRelevant
             };

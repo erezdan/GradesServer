@@ -33,10 +33,13 @@ namespace GradesServer.Controllers
             if (dto.Score is < 0 or > 100)
                 return BadRequest("Score must be between 0 and 100");
 
+            if (dto.TestId == null)
+                return BadRequest("TestId is required");
+
             var question = new Question
             {
                 //SnapshotId = dto.SnapshotId,
-                TestId = dto.TestId,
+                TestId = dto.TestId.Value,
                 QuestionText = dto.QuestionText,
                 Score = dto.Score,
                 IsRelevant = dto.IsRelevant
