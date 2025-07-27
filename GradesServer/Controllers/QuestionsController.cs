@@ -18,10 +18,17 @@ namespace GradesServer.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestions([FromQuery] int snapshotId)
+        public async Task<ActionResult<IEnumerable<ReturnedQuestionDto>>> GetQuestions([FromQuery] int snapshotId)
         {
             var questions = await _context.Questions
                 .Where(q => q.SnapshotId == snapshotId)
+                .Select(q => new ReturnedQuestionDto
+                {
+                    QuestionId = q.QuestionId,
+                    QuestionText = q.QuestionText,
+                    Score = q.Score,
+                    IsRelevant = q.IsRelevant
+                })
                 .ToListAsync();
 
             return Ok(questions);
@@ -36,9 +43,12 @@ namespace GradesServer.Controllers
             if (dto.TestId == null)
                 return BadRequest("TestId is required");
 
+            if (string.IsNullOrWhiteSpace(dto.QuestionText))
+                return BadRequest("QuestionText is required");
+
             var question = new Question
             {
-                //SnapshotId = dto.SnapshotId,
+                SnapshotId = dto.SnapshotId,
                 TestId = dto.TestId.Value,
                 QuestionText = dto.QuestionText,
                 Score = dto.Score,
@@ -51,10 +61,10 @@ namespace GradesServer.Controllers
             return CreatedAtAction(nameof(GetQuestions), new { snapshotId = question.SnapshotId }, question);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateQuestion(int id, [FromBody] Question dto)
+        [HttpPut("{snapshotId:int}/{questionId:int}")]
+        public async Task<ActionResult> UpdateQuestion(int snapshotId, int questionId, [FromBody] UpdateQuestionDto dto)
         {
-            var question = await _context.Questions.FindAsync(id);
+            var question = await FindQuestion(snapshotId, questionId);
             if (question == null)
                 return NotFound();
 
@@ -69,16 +79,20 @@ namespace GradesServer.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteQuestion(int id)
+        [HttpDelete("{snapshotId:int}/{questionId:int}")]
+        public async Task<ActionResult> DeleteQuestion(int snapshotId, int questionId)
         {
-            var question = await _context.Questions.FindAsync(id);
+            var question = await FindQuestion(snapshotId, questionId);
             if (question == null)
                 return NotFound();
 
             _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
+
+        private Task<Question?> FindQuestion(int snapshotId, int questionId) =>
+            _context.Questions.FirstOrDefaultAsync(q => q.SnapshotId == snapshotId && q.QuestionId == questionId);
     }
 }

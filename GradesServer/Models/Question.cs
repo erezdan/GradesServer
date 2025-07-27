@@ -9,6 +9,7 @@ namespace GradesServer.Models
     [PrimaryKey(nameof(QuestionId), nameof(SnapshotId))]
     public class Question
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonIgnore]
         public int QuestionId { get; set; }
 
