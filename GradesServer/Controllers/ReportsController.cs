@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GradesServer.Data;
 using Microsoft.EntityFrameworkCore;
+using GradesServer.DTOs;
 
 namespace GradesServer.Controllers
 {
@@ -15,48 +16,44 @@ namespace GradesServer.Controllers
             _context = context;
         }
 
-        // GET api/reports/student/5
+        // GET api/reports/student
         [HttpGet("student/{snapshotId}")]
         public async Task<IActionResult> GetStudentReport(int snapshotId)
         {
-            var subjectZones = await _context.SubjectZones
-                .Where(sz => sz.SnapshotId == snapshotId)
-                .Join(_context.Zones,
-                    sz => sz.ZoneId,
-                    z => z.ZoneId,
-                    (sz, z) => new
-                    {
-                        sz.ZoneId,
-                        sz.SnapshotId,
-                        ZoneName = z.ZoneName
-                    })
+            // Step 1: Get all SubjectIds for the snapshot
+            var subjectIds = await _context.Subjects
+                .Where(s => s.SnapshotId == snapshotId)
+                .Select(s => s.SubjectId)
                 .ToListAsync();
 
-            var zoneScores = new List<(int ZoneId, string ZoneName, double Score)>();
+            var allZoneScores = new List<ZoneScoreDto>();
 
-            foreach (var sz in subjectZones)
+            // Step 2: Loop over each subject and call SP
+            foreach (var subjectId in subjectIds)
             {
-                var questionScores = await _context.ZonesQuestions
-                    .Where(zq => zq.SnapshotId == snapshotId && zq.ZoneId == sz.ZoneId)
-                    .Join(_context.Questions,
-                        zq => new { zq.SnapshotId, zq.QuestionId },
-                        q => new { q.SnapshotId, q.QuestionId },
-                        (zq, q) => new { q.Score, q.IsRelevant })
-                    .Where(q => q.IsRelevant && q.Score.HasValue)
-                    .Select(q => q.Score!.Value)
+                var zoneScores = await _context.Set<ZoneScoreDto>()
+                    .FromSqlInterpolated(
+                        $"EXEC calculate_score_per_snapshot {snapshotId}, {subjectId}")
                     .ToListAsync();
 
-                if (questionScores.Any())
-                {
-                    double avg = questionScores.Average();
-                    zoneScores.Add((sz.ZoneId, sz.ZoneName, avg));
-                }
+                allZoneScores.AddRange(zoneScores);
             }
 
-            var top3 = zoneScores.OrderByDescending(z => z.Score).Take(3).ToList();
-            var bottom3 = zoneScores.OrderBy(z => z.Score).Take(3).ToList();
-            var under60 = zoneScores.Where(z => z.Score < 60).ToList();
+            // Step 3: Flatten and extract zone scores
+            var simplified = allZoneScores
+                .Select(z => new
+                {
+                    z.ZoneName,
+                    Score = z.NationalTestScores ?? 0
+                })
+                .ToList();
 
+            // Step 4: Analyze
+            var top3 = simplified.OrderByDescending(z => z.Score).Take(3).ToList();
+            var bottom3 = simplified.OrderBy(z => z.Score).Take(3).ToList();
+            var under60 = simplified.Where(z => z.Score < 60).ToList();
+
+            // Step 5: Return result
             return Ok(new
             {
                 Title = "Student report",

@@ -4,8 +4,8 @@
     {
         public string Title { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
-        public List<ZoneScoreDto> Top3Zones { get; set; } = new();
-        public List<ZoneScoreDto> Bottom3Zones { get; set; } = new();
-        public List<ZoneScoreDto> Under60Zones { get; set; } = new();
+        public List<ZoneScoreCalculatedDto> Top3Zones { get; set; } = new();
+        public List<ZoneScoreCalculatedDto> Bottom3Zones { get; set; } = new();
+        public List<ZoneScoreCalculatedDto> Under60Zones { get; set; } = new();
     }
 }

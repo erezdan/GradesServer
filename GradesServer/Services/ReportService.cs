@@ -25,7 +25,7 @@ namespace GradesServer.Services
                 .Select(z => new { z.ZoneId, z.ZoneName })
                 .ToListAsync();
 
-            var zoneScores = new List<ZoneScoreDto>();
+            var zoneScores = new List<ZoneScoreCalculatedDto>();
 
             foreach (var zone in zones)
             {
@@ -41,7 +41,7 @@ namespace GradesServer.Services
 
                 if (relevantQuestions.Any())
                 {
-                    zoneScores.Add(new ZoneScoreDto
+                    zoneScores.Add(new ZoneScoreCalculatedDto
                     {
                         ZoneId = zone.ZoneId,
                         ZoneName = zone.ZoneName,
