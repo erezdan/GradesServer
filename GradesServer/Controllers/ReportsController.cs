@@ -70,6 +70,7 @@ namespace GradesServer.Controllers
         {
             var zoneScoresDict = new Dictionary<int, List<int>>();
 
+            // Step 1: Get all ZoneScores for the provided snapshotIds
             var questionData = await _context.ZonesQuestions
                 .Where(zq => snapshotIds.Contains(zq.SnapshotId))
                 .Join(_context.Questions,
@@ -79,6 +80,7 @@ namespace GradesServer.Controllers
                 .Where(q => q.IsRelevant && q.Score.HasValue)
                 .ToListAsync();
 
+            // Step 2: Group by ZoneId and calculate average scores
             foreach (var item in questionData)
             {
                 if (!zoneScoresDict.ContainsKey(item.ZoneId))
@@ -87,6 +89,7 @@ namespace GradesServer.Controllers
                 zoneScoresDict[item.ZoneId].Add(item.Score!.Value);
             }
 
+            // Step 3: Calculate average scores for each zone
             var avgZoneScores = zoneScoresDict
                 .Select(z => new
                 {
@@ -96,6 +99,7 @@ namespace GradesServer.Controllers
                 .OrderBy(z => z.AverageScore)
                 .ToList();
 
+            // Step 4: Find the zone with the lowest average score
             var worstZone = avgZoneScores.FirstOrDefault();
             string? worstZoneName = worstZone != null
                 ? await _context.Zones
@@ -104,6 +108,7 @@ namespace GradesServer.Controllers
                     .FirstOrDefaultAsync()
                 : null;
 
+            // Step 5: Return the result
             return Ok(new
             {
                 Title = "Principal Report",
