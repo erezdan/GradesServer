@@ -1,6 +1,6 @@
 ﻿USE [Grades]
 GO
-/****** Object:  StoredProcedure [dbo].[simple_migration_script]    Script Date: 28/07/2025 10:23:04 ******/
+/****** Object:  StoredProcedure [dbo].[simple_migration_script]    Script Date: 28/07/2025 11:38:23 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

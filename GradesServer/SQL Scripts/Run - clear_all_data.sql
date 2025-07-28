@@ -1,0 +1,1 @@
+exec clear_all_data;

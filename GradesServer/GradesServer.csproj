@@ -7,13 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="StoredProcedures\clear_all_data.sql" />
+    <None Remove="SQL Scripts\StoredProcedures\clear_all_data.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="StoredProcedures\clear_all_data.sql" />
-    <Content Include="StoredProcedures\data_generator.sql" />
-    <Content Include="StoredProcedures\simple_migration_script.sql" />
+    <Content Include="SQL Scripts\StoredProcedures\calculate_score_per_snapshot.sql" />
+    <Content Include="SQL Scripts\StoredProcedures\clear_all_data.sql" />
+    <Content Include="SQL Scripts\StoredProcedures\data_generator.sql" />
+    <Content Include="SQL Scripts\StoredProcedures\simple_migration_script.sql" />
   </ItemGroup>
 
   <ItemGroup>

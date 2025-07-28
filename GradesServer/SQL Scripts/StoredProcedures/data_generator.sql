@@ -1,4 +1,11 @@
-﻿ALTER PROCEDURE [dbo].[data_generator]
+﻿USE [Grades]
+GO
+/****** Object:  StoredProcedure [dbo].[data_generator]    Script Date: 28/07/2025 12:12:23 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[data_generator]
     @NumSubjects INT,
     @NumZonesPerSubject INT,
     @NumQuestionsPerZone INT,

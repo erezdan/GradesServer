@@ -1,6 +1,6 @@
 ﻿USE [Grades]
 GO
-/****** Object:  StoredProcedure [dbo].[clear_all_data]    Script Date: 24/07/2025 18:21:41 ******/
+/****** Object:  StoredProcedure [dbo].[clear_all_data]    Script Date: 28/07/2025 11:37:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

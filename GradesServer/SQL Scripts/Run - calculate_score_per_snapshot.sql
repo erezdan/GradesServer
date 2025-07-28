@@ -1,0 +1,1 @@
+EXEC calculate_score_per_snapshot @SnapshotId = 1, @SubjectId = 106
